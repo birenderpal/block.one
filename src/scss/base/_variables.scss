@@ -1,0 +1,38 @@
+
+/*
+ Layout related
+*/
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px
+) !default;
+
+// Grid breakpoints
+//
+// Define the minimum dimensions at which your layout will change,
+// adapting to different screen sizes, for use in media queries.
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+) !default;
+
+// Grid gutter
+
+$gutter-width:             1.875rem !default;
+
+// Grid columns
+
+$grid-columns:  24!default;
+
+
+$btn-font-weight:             600 !default;
+$btn-box-shadow:              inset 0 1px 0 rgba(white, .15), 0 1px 1px rgba(black, .075) !default;
+$btn-active-box-shadow:       inset 0 3px 5px rgba(black, .125) !default;
+
+$btn-transition:              color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out !default;

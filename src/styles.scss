@@ -1,0 +1,64 @@
+// import normalize.css to apply default styling
+@import '~normalize.css/normalize.css';
+
+
+
+// Fonts
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,500,600,700,900&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Roboto|Titillium+Web&display=swap");
+/*
+ Base elements
+*/
+// Change all elements to use border-box
+html {
+  font-size: 16px;
+  box-sizing: border-box;
+  /*
+  font-size:16px;
+  @include below-display-size("md"){
+      font-size:14px;
+  }
+  */
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html,
+body {
+  font-family: 'Titillium Web',sans-serif;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+
+// Variables
+@import './scss/base/variables';
+
+// Mixins
+
+@import './scss/mixins/breakpoints';
+@import './scss/mixins/grid-framework';
+@import './scss/mixins/mixins';
+@import './scss/mixins/shadows';
+@import './scss/mixins/buttons';
+
+
+// import layout
+
+@import './scss/layout/layout';
+
+// import modules
+
+// Button
+@import './scss/modules/button';
+
+@import './scss/modules/block';
+
+@import './scss/modules/spinner';
+
+@import './scss/modules/list';
+

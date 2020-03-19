@@ -1,0 +1,77 @@
+%container{
+    padding-right: $gutter-width / 2;
+    padding-left: $gutter-width / 2;
+    @include below-displays-size("md"){
+        padding-right:$gutter-width / 3;
+        padding-left: $gutter-width / 3;
+    }
+}
+
+.container{
+    //margin:auto;
+    @extend %container;
+    @include below-displays-size("sm"){
+        max-width: map-get($container-max-widths,"sm");
+    }
+    @include below-displays-size("md"){
+        max-width: map-get($container-max-widths,"md");
+    }
+    @include below-displays-size("lg"){
+        max-width: map-get($container-max-widths,"lg");
+    }
+    @include below-displays-size("xl"){
+        max-width: map-get($container-max-widths,"xl");
+    }
+}
+// full width container with no padding
+.container-full{
+    width: 100%;    
+}
+
+.row {
+    margin-right: - $gutter-width / 2;
+    margin-left: - $gutter-width / 2;
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;    
+}
+.row-gutter{
+    margin-top: $gutter-width / 2;
+    margin-bottom: $gutter-width / 2;
+}
+
+.align-center{
+    text-align: center;
+}
+.centered{
+    margin:auto;
+    float:none;
+}
+
+/*
+Span classes for custom column size
+Span would span to 100% width for small deviecs, above small it would be %age.
+*/
+
+%grid-column {
+    position: relative;
+    width: 100%;
+    padding-right: $gutter-width/3;
+    padding-left: $gutter-width/3;
+}
+
+
+@include make-grid-columns();
+  
+
+// Remove the negative margin from default .row, then the horizontal padding
+// from all immediate children columns (to prevent runaway style inheritance).
+.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+    > [class*="span-"] {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
