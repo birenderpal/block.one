@@ -1,47 +1,7 @@
 import { JsonRpc, RpcError } from 'eosjs';
 
-const endpoint = "https://api.eosnewyork.io"
+const endpoint = 'https://api.eosnewyork.io';
 const rpc = new JsonRpc(endpoint, { fetch });
-
-
-// get latest 10 blocks
-// 1. first get the head block number
-// 2. work out the 10 block numbers using head block number
-// 3. get blocks using 10 blocks from the step 2.
-
-export const getBlocks = async () => {
-    try {
-        // get head block number
-        let headBlockNum = await getHeadBlockNum();
-        if (headBlockNum.status == "ERROR")
-            return headBlockNum
-
-        // blockDetails array to hold details of 10 recently fetched blocks
-        let blocks = [];
-
-        // Loop through to fetch 10 block numbers going back from headBlockNum
-        let i = 0;
-        while (i < 10) {
-            let blockNum = parseInt(headBlockNum.headBlockNum) - i;
-
-            //let { id, timestamp, transactions } = await getBlock(blockNum);
-            let { block } = await getBlock(blockNum);
-
-            //blocks.push({ id, timestamp, actions: transactions.length })
-            blocks.push({ id: block.id, timestamp: block.timestamp, actions: block.transactions.length })
-            i++;
-        }
-        return { status: 'SUCCESS', blocks }
-    } catch (e) {
-        if (e instanceof RpcError) {
-            let error = JSON.stringify(e.json, null, 2)
-            return { status: "ERROR", error }
-        }
-        else {
-            return { status: "ERROR", error: e.toString() }
-        }
-    }
-};
 
 // getHeadBlockId function to return the head_block_num
 // api endpoint get_info sample response below, head_block_num is head block number
@@ -61,39 +21,72 @@ export const getBlocks = async () => {
   }
 */
 export const getHeadBlockNum = async () => {
-    try {
-        let block = await rpc.get_info()
-        return { status: "SUCCESS", headBlockNum: block['head_block_num'] }
-    } catch (e) {
-
-        if (e instanceof RpcError) {
-
-            let error = JSON.stringify(e.json, null, 2)
-            return { status: "ERROR", error }
-        }
-        else {
-            return { status: "ERROR", error: e.toString() }
-        }
+  try {
+    const block = await rpc.get_info();
+    return { status: 'SUCCESS', headBlockNum: block.head_block_num };
+  } catch (e) {
+    if (e instanceof RpcError) {
+      const error = JSON.stringify(e.json, null, 2);
+      return { status: 'ERROR', error };
     }
-}
+
+    return { status: 'ERROR', error: e.toString() };
+  }
+};
 
 // getBlock function returns the response of get_block api call, accepting block_num or block_id
-export const getBlock = async (blockNum) => {
-    try {
-        let block = await rpc.get_block(blockNum)
-        return { status: "SUCCESS", block }
-    } catch (e) {
-
-        if (e instanceof RpcError) {
-
-            let error = JSON.stringify(e.json, null, 2)
-            return { status: "ERROR", error }
-        }
-        else {
-            return { status: "ERROR", error: e.toString() }
-        }
+export const getBlock = async blockNum => {
+  try {
+    const block = await rpc.get_block(blockNum);
+    return { status: 'SUCCESS', block };
+  } catch (e) {
+    if (e instanceof RpcError) {
+      const error = JSON.stringify(e.json, null, 2);
+      return { status: 'ERROR', error };
     }
-}
+    return { status: 'ERROR', error: e.toString() };
+  }
+};
 
+// get latest 10 blocks
+// 1. first get the head block number
+// 2. work out the 10 block numbers using head block number
+// 3. get blocks using 10 blocks from the step 2.
 
+export const getBlocks = async () => {
+  try {
+    // get head block number
+    const headBlockNum = await getHeadBlockNum();
+    if (headBlockNum.status === 'ERROR') return headBlockNum;
 
+    // blockDetails array to hold details of 10 recently fetched blocks
+    const blocks = [];
+
+    // Loop through to fetch 10 block numbers going back from headBlockNum
+    let i = 0;
+    while (i < 10) {
+      // eslint-disable-next-line radix
+      const blockNum = parseInt(headBlockNum.headBlockNum) - i;
+
+      // let { id, timestamp, transactions } = await getBlock(blockNum);
+      // eslint-disable-next-line no-await-in-loop
+      const { block } = await getBlock(blockNum);
+
+      // blocks.push({ id, timestamp, actions: transactions.length })
+      blocks.push({
+        id: block.id,
+        timestamp: block.timestamp,
+        actions: block.transactions.length,
+      });
+      i += 1;
+    }
+    return { status: 'SUCCESS', blocks };
+  } catch (e) {
+    if (e instanceof RpcError) {
+      const error = JSON.stringify(e.json, null, 2);
+      return { status: 'ERROR', error };
+    }
+
+    return { status: 'ERROR', error: e.toString() };
+  }
+};

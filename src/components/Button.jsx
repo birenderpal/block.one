@@ -8,7 +8,8 @@ export default function Button(props) {
     'btn-rounded': btnRounded,
   });
   return (
-    <button
+    <button 
+      type="button"
       className={classList}
       onClick={() => onClick()}
       data-testid="load-button"
@@ -36,6 +37,7 @@ Button.propTypes = {
     'success',
   ]),
   btnRounded: PropTypes.bool,
+  // eslint-disable-next-line react/require-default-props
   onClick: PropTypes.func,
 };
 

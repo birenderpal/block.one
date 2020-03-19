@@ -10,7 +10,7 @@ function Spinner({ size, color }) {
     { 'loader-sm': size === 'small' },
     { 'loader-md': size === 'medium' },
   );
-  return <div className={spinnerClass} data-testid="spinner"></div>;
+  return <div className={spinnerClass} data-testid="spinner" />;
 }
 Spinner.defaultProps = {
   size: 'medium',

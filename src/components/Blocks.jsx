@@ -1,9 +1,12 @@
-import React, { useState, useEffect,useMemo } from 'react';
+/* eslint-disable no-nested-ternary */
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Button from './Button';
 import Spinner from './Spinner';
 import BlockAction from './BlockAction';
 import ListItem from './ListItem';
 import ListGroup from './ListGroup';
+
 
 export default function Blocks({ getBlocks, getBlock }) {
   // State which changes on Load button click and triggers fetching of new blocks.
@@ -23,12 +26,12 @@ export default function Blocks({ getBlocks, getBlock }) {
     setLoad(true);
   };
 
-  // Call back to set 
+  // Call back to set
   const blockClick = blockId => {
+    // eslint-disable-next-line no-unused-expressions
     blockId === showBlockNum ? setShowBlockNum(null) : setShowBlockNum(blockId);
   };
 
-  
   // Effect which will trigger on state of "load" changes
   // For load=true the effect will fetch the latest blocks.
   // For load=false effect will not do anything
@@ -37,8 +40,8 @@ export default function Blocks({ getBlocks, getBlock }) {
     if (load) {
       (async () => {
         setBlocks(null);
-        let blocks = await getBlocks();
-        setBlocks(blocks);
+        const blocksFetched = await getBlocks();
+        setBlocks(blocksFetched);
         setLoad(false);
       })();
     }
@@ -47,11 +50,11 @@ export default function Blocks({ getBlocks, getBlock }) {
   useEffect(() => {
     if (showBlockNum != null) {
       (async () => {
-        let data = await getBlock(showBlockNum);
-        if (data.status === 'ERROR') {
-          setData(data.error);
+        const dataFetched = await getBlock(showBlockNum);
+        if (dataFetched.status === 'ERROR') {
+          setData(dataFetched.error);
         } else {
-          setData(JSON.stringify(data.block, null, 2));
+          setData(JSON.stringify(dataFetched.block, null, 2));
         }
       })();
     }
@@ -63,27 +66,28 @@ export default function Blocks({ getBlocks, getBlock }) {
         <BlockAction align="align-center">
           <Button
             btnColor="primary"
-            btnRounded={true}
+            btnRounded
             btnText={load ? 'Loading..' : 'Load'}
             onClick={loadBlock}
-          ></Button>
+          />
         </BlockAction>
         <div className="span-19 centered">
-        {load ? <Spinner size="large" color="primary"/> : null}
-        {blocks ? (
-          blocks.status === 'SUCCESS' ? (
-            
+          {load ? <Spinner size="large" color="primary" /> : null}
+          {blocks ? (
+            blocks.status === 'SUCCESS' ? (
               <div className="block-list" data-testid="block-list">
-                {blocks.blocks.map((block, key) => {
+                {blocks.blocks.map(block => {
                   return (
-                    <ListGroup key={key}>
+                    <ListGroup key={block.id}>
                       <ListItem
-                        clickable={true}
-                        inline={true}
+                        clickable
+                        inline
                         onClick={blockClick}
                         blockID={block.id}
                       >
-                        <span className="list-inline-item"> {block.id}</span>
+                        <span className="list-inline-item">
+                          {block.id}
+                        </span>
                         <span className="list-inline-item">
                           {block.timestamp}
                         </span>
@@ -101,17 +105,24 @@ export default function Blocks({ getBlocks, getBlock }) {
                     </ListGroup>
                   );
                 })}
-              </div>            
-          ) : (
-            <div className="error" data-testid="error">
-              {blocks.error}
-            </div>
-          )
-        ) : null}
+              </div>
+            ) : (
+              <div className="error" data-testid="error">
+                {blocks.error}
+              </div>
+            )
+          ) : null}
         </div>
       </div>
     </>
   );
 }
+
+
+Blocks.propTypes = {
+  getBlock: PropTypes.func.isRequired,
+  getBlocks: PropTypes.func.isRequired,  
+};
+
 
 Blocks.displayName = 'Blocks';
